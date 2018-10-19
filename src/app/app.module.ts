@@ -2,10 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-
+import { RuleToolComponent } from "./directive/ruleTool/rule.component";
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RuleToolComponent
   ],
   imports: [
     BrowserModule
