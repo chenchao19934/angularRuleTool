@@ -12,14 +12,14 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input('isScaleRevise') isScaleRevise: boolean = false;
 	@Input('presetLine') presetLine: Array<any> = [];
 	@Input('contentLayout') contentLayout: Object = { top: 50, left: 50 };
-	@HostListener('mousemove', ['$event']) mousemove($event) { 
-		this.dottedLineMove($event); 
+	@HostListener('mousemove', ['$event']) mousemove($event) {
+		this.dottedLineMove($event);
 	}
-	@HostListener('mouseup', ['$event']) mouseup($event) { 
-		this.dottedLineUp($event); 
+	@HostListener('mouseup', ['$event']) mouseup($event) {
+		this.dottedLineUp($event);
 	}
 	@HostListener('window:keyup', ['$event']) keyup($event) {
-		this.keyboard($event); 
+		this.keyboard($event);
 	}
 	@HostListener('window:resize') onResize() {
 		this.xScale = [];
@@ -37,16 +37,16 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 	public dragFlag = ''; // 拖动开始标记，可能值x(从水平标尺开始拖动);y(从垂直标尺开始拖动)
 	public levelLineList = []; // 生成的水平线列表
 	public verticalLineList = []; // 生成的垂直线列表
-	public levelDottedLeft: any = -2; // 水平虚线位置
-	public verticalDottedTop: any = -2; // 垂直虚线位置
+	public levelDottedLeft: any = -10; // 水平虚线位置
+	public verticalDottedTop: any = -10; // 垂直虚线位置
 	public rulerWidth: number = 0; // 垂直标尺的宽度
 	public rulerHeight: number = 0; // 水平标尺的高度
 	public dragLineId = ''; // 被移动线的ID
 	public keyCode = { r: 72 };
 	public rulerToggle: boolean = true // 标尺辅助线显示开关
-	public self:any;
+	public self: any;
 
-	constructor(el:ElementRef) { 
+	constructor(el: ElementRef) {
 		this.self = el.nativeElement;
 	}
 
@@ -54,7 +54,7 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.init();
 		this.quickGeneration(this.presetLine);// 生成预置参考线
 	}
-	
+
 	ngAfterViewInit(): void { }
 
 	ngOnDestroy(): void { }
@@ -63,35 +63,16 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.box();
 		this.scaleCalc();
 	}
-	/**
-	 * 获取窗口宽与高
-	 */
+	// 获取窗口宽与高
 	box() {
-		if (this.isScaleRevise) { // 根据内容部分进行刻度修正
-			const content = this.self.querySelector('#contentRule');
-			const contentLeft = content.offsetLeft || 1280;
-			const contentTop = content.offsetTop || 1000;
-			for (let i = 0; i < contentLeft; i += 1) {
-				if (i % 50 === 0 && i + 50 <= contentLeft) {
-					this.xScale.push({ id: i });
-				}
-			}
-			for (let i = 0; i < contentTop; i += 1) {
-				if (i % 50 === 0 && i + 50 <= contentTop) {
-					this.yScale.push({ id: i });
-				}
-			}
-		}
 		this.windowWidth = document.documentElement.clientWidth - this.leftSpacing;
 		this.windowHeight = document.documentElement.clientHeight - this.topSpacing;
 		this.rulerWidth = this.self.querySelector('#verticalRuler').offsetWidth;
 		this.rulerHeight = this.self.querySelector('#levelRuler').offsetHeigth;
-		this.leftSpacing = this.self.querySelector('#verticalRuler').offsetParent.offsetLeft || 0;
-		this.topSpacing = this.self.querySelector('#levelRuler').offsetParent.offsetTop || 0;
+		this.leftSpacing = this.self.querySelector('#verticalRuler').parentNode.parentNode.offsetLeft || 0;
+		this.topSpacing = this.self.querySelector('#levelRuler').parentNode.parentNode.offsetTop || 0;
 	}
-	/**
-	 * 计算刻度
-	 */
+	// 计算刻度
 	scaleCalc() {
 		for (let i = 0; i < this.windowWidth; i += 1) {
 			if (i % 50 === 0) {
@@ -104,24 +85,17 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 		}
 	}
-	/**
-	 * 水平参考线
-	 */
+	// 生成一个水平参考线
 	newLevelLine() {
-		this.isDrag = !this.isDrag;
+		this.isDrag = true;
 		this.dragFlag = 'x';
 	}
-	/**
-	 * 垂直参考线
-	 */
+	// 生成一个垂直参考线
 	newVerticalLine() {
-		this.isDrag = !this.isDrag;
+		this.isDrag = true;
 		this.dragFlag = 'y';
 	}
-	/**
-	 * 虚线移动
-	 * @param $event
-	 */
+	// 虚线移动
 	dottedLineMove($event) {
 		switch (this.dragFlag) {
 			case 'x':
@@ -148,134 +122,122 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 				break
 		}
 	}
-	/**
-	 * 虚线松开
-	 * @param $event 
-	 */
+	// 虚线松开
 	dottedLineUp($event) {
-		if (this.isDrag) {
-			this.isDrag = false;
-			switch (this.dragFlag) {
-				case 'x':
-					this.levelLineList.push(
-						{
-							id: 'levelLine' + this.levelLineList.length + 1,
-							title: $event.pageY + 1 - this.topSpacing + 'px',
-							top: $event.pageY - this.topSpacing + 1
+		if (this.dragFlag == 'y' && $event.pageX <= 18) {
+			return;
+		} else if (this.dragFlag == 'x' && $event.pageY <= 18) {
+			return;
+		} else {
+			if (this.isDrag) {
+				this.isDrag = false;
+				switch (this.dragFlag) {
+					case 'x':
+						this.levelLineList.push(
+							{
+								id: 'levelLine' + this.levelLineList.length + 1,
+								title: $event.pageY + 1 - this.topSpacing + 'px',
+								top: $event.pageY - this.topSpacing + 1
+							}
+						)
+						break
+					case 'y':
+						this.verticalLineList.push(
+							{
+								id: 'verticalLine' + this.verticalLineList.length + 1,
+								title: $event.pageX + 1 - this.leftSpacing + 'px',
+								left: $event.pageX - this.leftSpacing + 1
+							}
+						)
+						break
+					case 'l':
+						if ($event.pageY - this.topSpacing < this.rulerHeight) {
+							let Index, id;
+							this.levelLineList.forEach((item, index) => {
+								if (item.id === this.dragLineId) {
+									Index = index;
+									id = item.id;
+								}
+							})
+							this.levelLineList.splice(Index, 1, {
+								id: id,
+								title: -600 + 'px',
+								top: -600
+							})
+						} else {
+							let Index, id;
+							this.levelLineList.forEach((item, index) => {
+								if (item.id === this.dragLineId) {
+									Index = index;
+									id = item.id;
+								}
+							})
+							this.levelLineList.splice(Index, 1, {
+								id: id,
+								title: $event.pageY + 1 - this.topSpacing + 'px',
+								top: $event.pageY - this.topSpacing + 1
+							})
 						}
-					)
-					break
-				case 'y':
-					this.verticalLineList.push(
-						{
-							id: 'verticalLine' + this.verticalLineList.length + 1,
-							title: $event.pageX + 1 - this.leftSpacing + 'px',
-							left: $event.pageX - this.leftSpacing + 1
+						break
+					case 'v':
+						if ($event.pageX - this.leftSpacing < this.rulerWidth) {
+							let Index, id;
+							this.verticalLineList.forEach((item, index) => {
+								if (item.id === this.dragLineId) {
+									Index = index;
+									id = item.id;
+								}
+							})
+							this.verticalLineList.splice(Index, 1, {
+								id: id,
+								title: -600 + 'px',
+								left: -600
+							})
+						} else {
+							let Index, id;
+							this.verticalLineList.forEach((item, index) => {
+								if (item.id === this.dragLineId) {
+									Index = index;
+									id = item.id;
+								}
+							})
+							this.verticalLineList.splice(Index, 1, {
+								id: id,
+								title: $event.pageX + 1 - this.leftSpacing + 'px',
+								left: $event.pageX - this.leftSpacing + 1
+							})
 						}
-					)
-					break
-				case 'l':
-					if ($event.pageY - this.topSpacing < this.rulerHeight) {
-						let Index, id;
-						this.levelLineList.forEach((item, index) => {
-							if (item.id === this.dragLineId) {
-								Index = index;
-								id = item.id;
-							}
-						})
-						this.levelLineList.splice(Index, 1, {
-							id: id,
-							title: -600 + 'px',
-							top: -600
-						})
-					} else {
-						let Index, id;
-						this.levelLineList.forEach((item, index) => {
-							if (item.id === this.dragLineId) {
-								Index = index;
-								id = item.id;
-							}
-						})
-						this.levelLineList.splice(Index, 1, {
-							id: id,
-							title: $event.pageY + 1 - this.topSpacing + 'px',
-							top: $event.pageY - this.topSpacing + 1
-						})
-					}
-					break
-				case 'v':
-					if ($event.pageX - this.leftSpacing < this.rulerWidth) {
-						let Index, id;
-						this.verticalLineList.forEach((item, index) => {
-							if (item.id === this.dragLineId) {
-								Index = index;
-								id = item.id;
-							}
-						})
-						this.verticalLineList.splice(Index, 1, {
-							id: id,
-							title: -600 + 'px',
-							left: -600
-						})
-					} else {
-						let Index, id;
-						this.verticalLineList.forEach((item, index) => {
-							if (item.id === this.dragLineId) {
-								Index = index;
-								id = item.id;
-							}
-						})
-						this.verticalLineList.splice(Index, 1, {
-							id: id,
-							title: $event.pageX + 1 - this.leftSpacing + 'px',
-							left: $event.pageX - this.leftSpacing + 1
-						})
-					}
-					break
-				default:
-					break
+						break
+					default:
+						break
+				}
+				this.verticalDottedTop = this.levelDottedLeft = -10;
 			}
-			this.verticalDottedTop = this.levelDottedLeft = -10;
 		}
 	}
-	/**
-	 * 水平标尺处按下鼠标
-	 * @param event 
-	 */
+	// 水平标尺处按下鼠标
 	levelDragRuler(event) {
 		event.stopPropagation();
 		this.newLevelLine();
 	}
-	/**
-	 * 垂直标尺处按下鼠标
-	 * @param event 
-	 */
+	// 垂直标尺处按下鼠标
 	verticalDragRuler(event) {
 		event.stopPropagation();
 		this.newVerticalLine();
 	}
-	/**
-	 * 水平线处按下鼠标
-	 * @param id 水平线标识
-	 */
+	// 水平线处按下鼠标
 	dragLevelLine(id) {
 		this.isDrag = true;
 		this.dragFlag = 'l';
 		this.dragLineId = id;
 	}
-	/**
-	 * 垂直线处按下鼠标
-	 * @param id 垂直线标识
-	 */
+	// 垂直线处按下鼠标
 	dragVerticalLine(id) {
 		this.isDrag = true;
 		this.dragFlag = 'v';
 		this.dragLineId = id;
 	}
-	/**
-	 * 键盘事件
-	 * @param $event 
-	 */
+	// 键盘事件
 	keyboard($event) {
 		if (this.isHotKey) {
 			switch ($event.keyCode) {
@@ -288,10 +250,7 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 		}
 	}
-	/**
-	 * 预先生成参考线
-	 * @param params 
-	 */
+	// 快速生成参考线
 	quickGeneration(params) {
 		if (params) {
 			params.forEach(item => {
@@ -316,26 +275,24 @@ export class RuleToolComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 		}
 	}
-	/**
-	 * 删除参考线
-	 */
+	// 删除参考线
 	deleteGeneration() {
 		if (this.dragLineId !== '') {
 			if (this.dragLineId.indexOf('level') >= 0) {
-				let index = this.levelLineList.findIndex((value)=> { 
+				let index = this.levelLineList.findIndex((value) => {
 					return value.id === this.dragLineId;
 				});
-				this.levelLineList.splice(index,1);
-			}else {
-				let index = this.verticalLineList.findIndex((value)=> { 
+				this.levelLineList.splice(index, 1);
+			} else {
+				let index = this.verticalLineList.findIndex((value) => {
 					return value.id === this.dragLineId;
 				});
-				this.verticalLineList.splice(index,1);
+				this.verticalLineList.splice(index, 1);
 			}
 			this.isDrag = false;
 			this.dragLineId = '';
-			this.verticalDottedTop = -2;
-			this.levelDottedLeft = -2;
+			this.verticalDottedTop = -10;
+			this.levelDottedLeft = -10;
 		}
 	}
 }

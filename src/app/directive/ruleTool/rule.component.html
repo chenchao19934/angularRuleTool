@@ -6,11 +6,12 @@
 		<div id="verticalRuler" class="ScaleRuler_v" (click)="verticalDragRuler($event)">
 			<span *ngFor="let item of yScale; let i = index" [ngStyle]="{top:i * 50 + 2 + 'px'}" class="n">{{item.id}}</span>
 		</div>
+		
 		<div id="levelDottedLine" [ngStyle]="{top:verticalDottedTop + 'px'}" class="RefDot_h"></div>
 		<div id="verticalDottedLine" [ngStyle]="{left:levelDottedLeft + 'px'}" class="RefDot_v"></div>
+
 		<div *ngFor="let item of levelLineList" [id]="item.id" [title]="item.title" [ngStyle]="{top:item.top+ 'px'}" class="RefLine_h"
 		 (click)="dragLevelLine(item.id)"></div>
-	
 		<div *ngFor="let item of verticalLineList" [id]="item.id" [title]="item.title" [ngStyle]="{left:item.left+ 'px'}" class="RefLine_v"
 		 (click)="dragVerticalLine(item.id)"></div>
 	</div>
