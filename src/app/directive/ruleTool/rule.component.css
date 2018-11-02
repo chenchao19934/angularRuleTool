@@ -78,6 +78,7 @@
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAMAAABFaP0WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRFf39/////F3PnHQAAAAJ0Uk5T/wDltzBKAAAAEElEQVR42mJgYGRgZAQIMAAADQAExkizYQAAAABJRU5ErkJggg==) repeat-x left 1px;
   cursor: n-resize;
   top: -10px;
+  overflow: visible;
 }
 
 .RefDot_v {
@@ -86,6 +87,24 @@
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAMAAABFaP0WAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRFf39/////F3PnHQAAAAJ0Uk5T/wDltzBKAAAAEElEQVR42mJgYGRgZAQIMAAADQAExkizYQAAAABJRU5ErkJggg==) repeat-y 1px top;
   cursor: w-resize;
   left: -10px;
+  overflow: visible;
+}
+
+.RefDot_h>span,
+.RefDot_v>span {
+  position: absolute;
+  font-size: 12px;
+  color: rgb(86, 96, 123);
+}
+
+.RefDot_h>span {
+  top: -16px;
+  left: 50px;
+}
+
+.RefDot_v>span {
+  top: 50px;
+  left: 2px;
 }
 
 #contentRule {
