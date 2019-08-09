@@ -1,0 +1,35 @@
+<div class="drag-boundary" #myBounds>
+	<div class="{{widget.type}}" ngDraggable [bounds]="myBounds" [inBounds]="inBounds" [outOfBounds]="myOutOfBounds"
+		(endOffset)="changePosition($event,widget)" [position]="widget.position"
+		*ngFor="let widget of zplService.widgetList" [class.curchange]="widget === zplService.getCurrentWidget()"
+		(started)="clickWidget(widget)">
+		<ng-container [ngSwitch]="widget.type">
+			<ng-container *ngSwitchCase="'Text'">
+				<span class="custom-{{widget.type}}" [ngStyle]="{'font-size': widget.customFeature.fontSize + 'px',
+																											'font-family': widget.customFeature.fontType}">{{widget.title}}</span>
+			</ng-container>
+			<ng-container *ngSwitchCase="'Barcode'">
+				<div class="custom-{{widget.type}}">
+					<img src="{{widget.content}}" alt="">
+					<div>21000090012000010</div>
+				</div>
+			</ng-container>
+			<ng-container *ngSwitchCase="'Qrcode'">
+				<div class="custom-{{widget.type}}">
+					<img src="{{widget.content}}" alt="">
+				</div>
+			</ng-container>
+		</ng-container>
+	</div>
+</div>
+<div class="drag-btn">
+	<span (click)="add('Text')">Text</span>
+	<span (click)="add('Barcode')">Barcode</span>
+	<span (click)="add('Qrcode')">Qrcode</span>
+</div>
+
+<div class="drag-btn">
+	<label>纸张尺寸：</label>
+	宽： <input type="text"> mm
+	高： <input type="text"> mm
+</div>
