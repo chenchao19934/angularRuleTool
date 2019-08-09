@@ -1,35 +1,45 @@
-<div class="drag-boundary" #myBounds>
-	<div class="{{widget.type}}" ngDraggable [bounds]="myBounds" [inBounds]="inBounds" [outOfBounds]="myOutOfBounds"
-		(endOffset)="changePosition($event,widget)" [position]="widget.position"
-		*ngFor="let widget of zplService.widgetList" [class.curchange]="widget === zplService.getCurrentWidget()"
-		(started)="clickWidget(widget)">
-		<ng-container [ngSwitch]="widget.type">
-			<ng-container *ngSwitchCase="'Text'">
-				<span class="custom-{{widget.type}}" [ngStyle]="{'font-size': widget.customFeature.fontSize + 'px',
-																											'font-family': widget.customFeature.fontType}">{{widget.title}}</span>
-			</ng-container>
-			<ng-container *ngSwitchCase="'Barcode'">
-				<div class="custom-{{widget.type}}">
-					<img src="{{widget.content}}" alt="">
-					<div>21000090012000010</div>
-				</div>
-			</ng-container>
-			<ng-container *ngSwitchCase="'Qrcode'">
-				<div class="custom-{{widget.type}}">
-					<img src="{{widget.content}}" alt="">
-				</div>
-			</ng-container>
-		</ng-container>
-	</div>
+<div class="left-nav">
+
 </div>
 <div class="drag-btn">
 	<span (click)="add('Text')">Text</span>
 	<span (click)="add('Barcode')">Barcode</span>
 	<span (click)="add('Qrcode')">Qrcode</span>
 </div>
-
 <div class="drag-btn">
 	<label>纸张尺寸：</label>
-	宽： <input type="text"> mm
-	高： <input type="text"> mm
+	宽： <input type="text" [ngModel]="pageStyle.width" #myWidth (blur)="initPage('width', myWidth.value)"> mm
+	高： <input type="text" [ngModel]="pageStyle.height" #myHeight (blur)="initPage('height', myHeight.value)"> mm
+</div>
+<div class="drag-boundary" #myBounds [ngStyle]="{'height': pageStyle.height * 6.293 + 'px'}">
+	<div class="{{widget.type}}" ngDraggable [bounds]="myBounds" [inBounds]="inBounds" [outOfBounds]="myOutOfBounds"
+		(endOffset)="changePosition($event,widget)" [position]="widget.position"
+		*ngFor="let widget of zplService.widgetList" (started)="clickWidget(widget)">
+		<ng-container [ngSwitch]="widget.type">
+			<ng-container *ngSwitchCase="'Text'">
+				<div class="curchange-box" [class.curchange]="widget === zplService.getCurrentWidget()"
+					[ngStyle]="{'font-size': widget.customFeature.fontSize * (55.6 / pageStyle.width) + 'px', 'line-height': widget.customFeature.lineHeight}">
+					<span class="custom-{{widget.type}}" *ngIf="widget.customFeature.showTitle">{{widget.title}}{{widget.name}}</span>
+					<span class="custom-{{widget.type}}" *ngIf="!widget.customFeature.showTitle">#{{widget.title}}</span>
+				</div>
+			</ng-container>
+			<ng-container *ngSwitchCase="'Barcode'">
+				<div class="curchange-box" [class.curchange]="widget === zplService.getCurrentWidget()"
+					[ngStyle]="{'transform': 'scale(' + 55.6 / pageStyle.width + ')','transform-origin': 'left top'}">
+					<div class="custom-{{widget.type}}">
+						<img src="{{widget.content}}" alt="">
+						<div>21000090012000010</div>
+					</div>
+				</div>
+			</ng-container>
+			<ng-container *ngSwitchCase="'Qrcode'">
+				<div class="curchange-box" [class.curchange]="widget === zplService.getCurrentWidget()"
+					[ngStyle]="{'transform': 'scale(' + 55.6 / pageStyle.width + ')','transform-origin': 'left top'}">
+					<div class="custom-{{widget.type}}">
+						<img src="{{widget.content}}" alt="">
+					</div>
+				</div>
+			</ng-container>
+		</ng-container>
+	</div>
 </div>

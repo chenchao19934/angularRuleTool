@@ -11,18 +11,12 @@ import { ZplService } from "./zpl-printer.service";
 export class ZplPrinterComponent implements OnInit, OnDestroy, AfterViewInit {
 	public self: HTMLElement;
 	public inBounds = true;
-	public myOutOfBounds = {
-		top: false,
-		right: false,
-		bottom: false,
-		left: false
-	};
-	public edge = {
-		top: true,
-		bottom: true,
-		left: true,
-		right: true
-	};
+	public myOutOfBounds = { top: false, bottom: true, right: true, left: false };
+
+	public pageStyle = {
+		width: 70,
+		height: 40
+	}
 
 	constructor(el: ElementRef, public zplService: ZplService, ) {
 		this.self = el.nativeElement;
@@ -66,5 +60,9 @@ export class ZplPrinterComponent implements OnInit, OnDestroy, AfterViewInit {
 		console.log(event);
 		widget.position = event;
 		console.log(this.zplService.widgetList);
+	}
+
+	initPage(type: string, value: number) {
+		this.pageStyle[type] = value;
 	}
 }

@@ -1,7 +1,7 @@
 import { ZPLModal } from "./zpl.modal";
 export class TextModal extends ZPLModal {
   type: string = 'Text';
-  name: string = '自定义';
+  name: string = '###';
   constructor(config?: any) {
     super(config);
     this.position || (this.position = {
@@ -11,7 +11,8 @@ export class TextModal extends ZPLModal {
     this.width || (this.width = 100);
     this.customFeature || (this.customFeature = {
       fontSize: 24,
-      fontType: "Arial",
+      lineHeight: 1,
+      showTitle: true
     });
   }
 
