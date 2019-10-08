@@ -69,6 +69,14 @@ export class AngularDraggableDirective implements OnInit, OnDestroy, OnChanges, 
   /** Input css scale transform of element so translations are correct */
   @Input() scale = 1;
 
+  _scaleValue: any = 1;
+  @Input()
+  set scaleValue(value) {
+    console.log(value);
+    this._scaleValue = value;
+    this.transform();
+  }
+
   /** Whether to prevent default event */
   @Input() preventDefaultEvent = false;
 
@@ -200,7 +208,7 @@ export class AngularDraggableDirective implements OnInit, OnDestroy, OnChanges, 
       translateY = Math.round(translateY / this.gridSize) * this.gridSize;
     }
 
-    let value = `translate(${ Math.round(translateX) }px, ${ Math.round(translateY) }px)`;
+    let value = `translate(${Math.round(translateX)}px, ${Math.round(translateY)}px) scale(${this._scaleValue})`;
 
     this.renderer.setStyle(this.el.nativeElement, 'transform', value);
     this.renderer.setStyle(this.el.nativeElement, '-webkit-transform', value);
@@ -247,7 +255,7 @@ export class AngularDraggableDirective implements OnInit, OnDestroy, OnChanges, 
     // checking if browser is IE or Edge - https://github.com/xieziyu/angular2-draggable/issues/153
     let isIEOrEdge = /msie\s|trident\//i.test(window.navigator.userAgent);
     if (!isIEOrEdge) {
-      this.draggingSub.add(fromEvent(document, 'mouseleave', {passive: false}).subscribe(() => this.putBack()));
+      this.draggingSub.add(fromEvent(document, 'mouseleave', { passive: false }).subscribe(() => this.putBack()));
     }
     this.draggingSub.add(fromEvent(document, 'touchend', { passive: false }).subscribe(() => this.putBack()));
     this.draggingSub.add(fromEvent(document, 'touchcancel', { passive: false }).subscribe(() => this.putBack()));

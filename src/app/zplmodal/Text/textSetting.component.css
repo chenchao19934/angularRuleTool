@@ -1,0 +1,47 @@
+.design-editor {
+  width: 420px;
+  padding: 15px;
+  background: #f8f8f8;
+  border: 1px solid #ebedf0;
+  text-align: left;
+  position: relative;
+}
+
+.editor-title {
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.design-editor .position-field {
+  display: flex;
+}
+
+.retail-form__control-group {
+  margin-bottom: 20px;
+  color: #323233;
+  vertical-align: top;
+}
+
+.retail-form__control-group-label {
+  display: inline-block;
+  width: 120px;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #323233;
+  line-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.design-editor .retail-form__control-group-label {
+  width: 82px;
+}

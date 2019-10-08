@@ -20,7 +20,7 @@ export class ZplService {
     return widget;
   }
 
-  private _getWidgetClass(widgetType: string, config?: any) {
+  _getWidgetClass(widgetType: string, config?: any) {
     let widgetClass: ZPLModal;
     switch (widgetType) {
       case 'Text': widgetClass = new TextModal(config); break;
@@ -35,21 +35,43 @@ export class ZplService {
     return widgetClass;
   }
 
-  private _addWidgetToMap(widget: ZPLModal) {
+  _addWidgetToMap(widget: ZPLModal) {
     let key = widget.id;
     this.widgetMap[key] = widget;
   }
 
-  private _clearWidgetMap() {
+  _clearWidgetMap() {
     this.widgetMap = {};
   }
 
-  private _setWidgetList(eles: Array<any>) {
+  _deleteWidgetMapDataById(id: string) {
+    delete this.widgetMap[id];
+  }
+
+  _setWidgetList(eles: Array<any>) {
     let array: ZPLModal[] = [];
     for (let el of eles) {
       array.push(this._getWidgetClass(el.type, el));
     }
     this.widgetList = array;
+  }
+
+  public removeWidget(widgetId: string) {
+    this._deleteCurrentWidget(widgetId);
+    this._deleteWidgetMapDataById(widgetId);
+  }
+
+  _deleteCurrentWidget(widgetId: string) {
+    let widgetList = this.widgetList;
+    let moveWidgetData = typeof widgetId === 'object' ? widgetId : this.getWidgetById(widgetId);
+    let index = widgetList.indexOf(moveWidgetData);
+    if (index >= 0) {
+      widgetList.splice(index, 1);
+    }
+  }
+
+  public getWidgetById(id: string) {
+    return this.widgetMap[id];
   }
 
   public getWidgetList() {

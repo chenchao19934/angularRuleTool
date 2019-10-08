@@ -1,6 +1,7 @@
 import { ZPLModal } from "./zpl.modal";
 export class BarcodeModal extends ZPLModal {
   type: string = 'Barcode';
+  name: string = '条形码';
   constructor(config?: any) {
     super(config);
     this.customFeature || (this.customFeature = {})

@@ -1,9 +1,13 @@
 import { ZPLModal } from "./zpl.modal";
 export class TextModal extends ZPLModal {
   type: string = 'Text';
-  name: string = '###';
+  name: string = '文本';
+  // 字体打印方向H（水平）V（垂直）R（反向）
+  direction: string;
   constructor(config?: any) {
     super(config);
+    this.content = (this.content = '###'),
+    this.direction = (this.direction = 'H'),
     this.position || (this.position = {
       x: 0,
       y: 0

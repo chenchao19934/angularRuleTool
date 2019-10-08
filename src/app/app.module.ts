@@ -4,20 +4,29 @@ import { FormsModule } from '@angular/forms'
 
 import { AppComponent } from './app.component';
 import { RuleToolComponent } from "./directive/ruleTool/rule.component";
-import { ZplPrinterComponent } from "./directive/ZPLPrinter/zpl-printer.component";
-import { AngularDraggableDirective } from "./directive/draggable/angular-draggable.directive";
-import { from } from 'rxjs';
+import { ZplPrientModule } from "./directive/ZPLPrinter/zpl-printer.module";
+
+import { RouterModule, Routes } from '@angular/router';
+export const routers: Routes = [
+  { path: '', component: AppComponent },
+  { path: 'dialog', loadChildren: './directive/ZPLPrinter/zpl-printer.module#ZplPrientModule' },
+  { path: 'ruleTool', component: RuleToolComponent },
+  { path: '**', pathMatch: 'full', redirectTo: '' }
+]
+
+
 @NgModule({
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
-    RuleToolComponent,
-    ZplPrinterComponent,
-    AngularDraggableDirective
+    RuleToolComponent
   ],
   imports: [
-    BrowserModule, FormsModule
+    BrowserModule,
+    FormsModule,
+    ZplPrientModule,
+    RouterModule.forRoot(routers)
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: []
 })
 export class AppModule { }
